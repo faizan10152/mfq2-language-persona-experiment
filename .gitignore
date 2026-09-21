@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Third-party research data (Atari et al., 2023 -- OSF https://osf.io/srtxn/).
+# Not redistributed here; see README.md for how to obtain it.
+data/raw/*
+!data/raw/.gitkeep
+
+# Per-respondent human data derived from the OSF file. Regenerate in seconds with
+#   ./.venv/bin/python src/load_human.py
+# Aggregate statistics (human_country_stats.csv, human_pooled_stats.csv) ARE tracked.
+data/processed/human_respondents.csv
+
+# Machine-local Claude Code permission state (contains absolute paths).
+# A shared .claude/settings.json, if one is ever added, stays tracked.
+.claude/settings.local.json
