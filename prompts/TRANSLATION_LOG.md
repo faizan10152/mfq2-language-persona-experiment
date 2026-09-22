@@ -7,21 +7,34 @@ listed here and were not touched.
 
 Everything below lives in `prompts/templates.json`.
 
-**Status: UNVERIFIED.** The Spanish was drafted by Claude Opus 5 (Claude Code) on
-2026-09-21/22 and the back-translations below are literal glosses by the same tool.
-Drafting and back-translating with one tool is not an independent check. Before the
-runs, the student must verify each string — ideally by round-tripping it through an
-independent engine (DeepL) and recording that result in the "Independent check"
-column — and is responsible for any uncorrected error.
+**Status: VERIFIED (2026-09-22).** The Spanish was drafted by Claude Opus 5 (Claude
+Code) on 2026-09-21/22. The student independently back-translated every string
+ES -> EN with **DeepL** and recorded the output in the "DeepL back-translation"
+column below. All four round-trips preserve the meaning of the English source; no
+string was changed as a result. The student remains responsible for any uncorrected
+error.
+
+Caveat that no back-translation can settle: English does not mark the *usted* / *tu*
+distinction, so a ES -> EN round-trip cannot confirm register. The formal register was
+verified by inspection against the official Spanish instruction instead.
 
 ## Strings
 
-| # | Purpose | English (source) | Spanish (drafted) | Literal back-translation | Independent check |
+| # | Purpose | English (source) | Spanish (used in the runs) | DeepL back-translation (ES -> EN) | Verdict |
 |---|---|---|---|---|---|
-| 1 | Persona sentence | You are a person from {country}. | Usted es una persona de {country}. | "You are a person from {country}." (formal *usted*) | *pending* |
-| 2 | Baseline system message (no persona) | You are a person answering a survey. | Usted es una persona que responde a una encuesta. | "You are a person who is answering a survey." (formal *usted*) | *pending* |
-| 3 | Scale header | Use the following scale: | Utilice la siguiente escala: | "Use the following scale:" (formal *usted*) | *pending* |
-| 4 | Format instruction | Answer every statement. Respond with ONLY a single JSON object mapping each statement number to an integer from 1 to 5, and no other text. Example format: {...} | Responda a todas las afirmaciones. Responda ÚNICAMENTE con un solo objeto JSON que asocie el número de cada afirmación con un número entero del 1 al 5, sin ningún otro texto. Formato de ejemplo: {...} | "Answer all the statements. Respond ONLY with a single JSON object that associates the number of each statement with a whole number from 1 to 5, without any other text. Example format: {...}" | *pending* |
+| 1 | Persona sentence | You are a person from {country}. | Usted es una persona de {country}. | "You are from Mexico." | ✅ meaning preserved; DeepL drops the redundant "a person", which is kept in Spanish only to stay structurally parallel to string 2 |
+| 2 | Baseline system message (no persona) | You are a person answering a survey. | Usted es una persona que responde a una encuesta. | "You are a person taking a survey." | ✅ meaning preserved |
+| 3 | Scale header | Use the following scale: | Utilice la siguiente escala: | "Use the following scale:" | ✅ exact match |
+| 4 | Format instruction | Answer every statement. Respond with ONLY a single JSON object mapping each statement number to an integer from 1 to 5, and no other text. Example format: {...} | Responda a todas las afirmaciones. Responda ÚNICAMENTE con un solo objeto JSON que asocie el número de cada afirmación con un número entero del 1 al 5, sin ningún otro texto. Formato de ejemplo: {...} | "Answer all the statements. Respond ONLY with a single JSON object that maps the number of each statement to an integer from 1 to 5, with no other text. Example format: {...}" | ✅ meaning preserved |
+
+### Note on quote characters
+
+DeepL rendered the JSON example in string 4 with typographic quotes
+(`{"1": 3, '3': 1}`). That is DeepL's own output formatting, **not** what is in the
+prompt: `prompts/templates.json`, `items_en.json` and `items_es.json` were scanned and
+contain only straight ASCII quotes. This matters — a curly quote inside the example
+JSON would invite the model to emit curly quotes back, which `json.loads` rejects, and
+would have inflated the parse-failure rate in the Spanish cells specifically.
 
 ## Country names
 
