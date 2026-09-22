@@ -15,8 +15,10 @@ Atari et al. (2023).
 - [x] EN/ES questionnaire text extracted (`src/parse_docx.py`)
 - [x] Prompt templates (`prompts/templates.json`, `src/build_prompts.py`) — Spanish wording UNVERIFIED, see `prompts/TRANSLATION_LOG.md`
 - [x] Runner written (`src/run_models.py`) — awaiting model pulls, then smoke test
-- [ ] Full model runs
-- [ ] Analysis, tables, figures (`src/analyze.py`, `src/plots.py`)
+- [x] qwen2.5:7b (600/600, 100% parsed)
+- [ ] llama3.1:8b, mistral:7b
+- [x] Analysis (`src/analyze.py`) — 9 tidy tables
+- [ ] Figures (`src/plots.py`)
 
 ## Reproduce
 
