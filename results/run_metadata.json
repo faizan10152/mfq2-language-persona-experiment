@@ -1,0 +1,46 @@
+{
+  "ollama_version": "0.30.6",
+  "started_utc": "2026-09-22T13:55:57.696767+00:00",
+  "config": {
+    "_README": "Run configuration. Every value here must appear in the paper's Method section.",
+    "models": [
+      "qwen2.5:7b",
+      "llama3.1:8b",
+      "mistral:7b"
+    ],
+    "samples_per_cell": 50,
+    "sampling": {
+      "temperature": 0.8,
+      "_temperature_note": "Set explicitly, not inherited from Ollama's default, so the runs are reproducible from the paper alone. Decision taken 2026-09-22.",
+      "top_p": null,
+      "seed_per_sample": true,
+      "num_ctx": 4096,
+      "_num_ctx_note": "Set explicitly. Ollama's default depends on detected VRAM, so leaving it unset makes the run machine-dependent. The longest prompt is ~1.5k tokens, so 4096 leaves ample room for the 36-item JSON reply.",
+      "num_predict": 1024,
+      "_num_predict_note": "Generous cap; a valid reply is ~300 tokens. Prevents a rambling model from running forever without truncating a well-formed answer."
+    },
+    "max_parse_retries": 3,
+    "languages": [
+      "en",
+      "es"
+    ],
+    "personas": [
+      "none",
+      "Argentina",
+      "Chile",
+      "Colombia",
+      "Mexico",
+      "Peru"
+    ]
+  },
+  "models": {
+    "qwen2.5:7b": {
+      "model": "qwen2.5:7b",
+      "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+      "family": "qwen2",
+      "parameter_size": "7.6B",
+      "quantization_level": "Q4_K_M",
+      "modelfile_parameters": null
+    }
+  }
+}
