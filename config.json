@@ -10,7 +10,11 @@
     "temperature": 0.8,
     "_temperature_note": "Set explicitly, not inherited from Ollama's default, so the runs are reproducible from the paper alone. Decision taken 2026-09-22.",
     "top_p": null,
-    "seed_per_sample": true
+    "seed_per_sample": true,
+    "num_ctx": 4096,
+    "_num_ctx_note": "Set explicitly. Ollama's default depends on detected VRAM, so leaving it unset makes the run machine-dependent. The longest prompt is ~1.5k tokens, so 4096 leaves ample room for the 36-item JSON reply.",
+    "num_predict": 1024,
+    "_num_predict_note": "Generous cap; a valid reply is ~300 tokens. Prevents a rambling model from running forever without truncating a well-formed answer."
   },
   "max_parse_retries": 3,
   "languages": [

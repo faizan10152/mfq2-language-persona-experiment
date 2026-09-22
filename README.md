@@ -14,7 +14,8 @@ Atari et al. (2023).
 - [x] Item mapping resolved against the authors' own analysis code (`src/item_map.py`)
 - [x] EN/ES questionnaire text extracted (`src/parse_docx.py`)
 - [x] Prompt templates (`prompts/templates.json`, `src/build_prompts.py`) — Spanish wording UNVERIFIED, see `prompts/TRANSLATION_LOG.md`
-- [ ] Model runs (`src/run_models.py`)
+- [x] Runner written (`src/run_models.py`) — awaiting model pulls, then smoke test
+- [ ] Full model runs
 - [ ] Analysis, tables, figures (`src/analyze.py`, `src/plots.py`)
 
 ## Reproduce
