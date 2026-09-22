@@ -1,5 +1,5 @@
-### CELL es_Colombia   prompt_sha256_12=34a1511579d7
-### system: 'Eres una persona de Colombia.'
+### CELL es_Colombia   prompt_sha256_12=87fe1f776666
+### system: 'Usted es una persona de Colombia.'
 
 Para cada una de las afirmaciones a continuación, indique en qué medida cada afirmación lo describe a usted o sus opiniones.
 

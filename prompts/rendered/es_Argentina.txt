@@ -1,5 +1,5 @@
-### CELL es_Argentina   prompt_sha256_12=f81810a8d704
-### system: 'Eres una persona de Argentina.'
+### CELL es_Argentina   prompt_sha256_12=45e3257a890a
+### system: 'Usted es una persona de Argentina.'
 
 Para cada una de las afirmaciones a continuación, indique en qué medida cada afirmación lo describe a usted o sus opiniones.
 

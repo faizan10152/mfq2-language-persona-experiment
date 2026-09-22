@@ -3,6 +3,14 @@
     "Every string in this file is a DESIGN DECISION owned by the student, not a",
     "fact recovered from a source. Edit freely; src/build_prompts.py re-renders.",
     "",
+    "Decisions taken 2026-09-22:",
+    "  - Spanish uses the FORMAL 'usted' throughout, matching the register of the",
+    "    official Spanish instruction and response labels.",
+    "  - ALL 12 cells carry a system message. The no-persona baseline gets a",
+    "    contentless one that is structurally parallel to the persona sentence",
+    "    ('You are a person ...' / 'Usted es una persona ...'), so the only thing",
+    "    that varies across persona conditions is the country cue itself.",
+    "",
     "What is NOT in this file, because it is official and must not be paraphrased:",
     "  - the MFQ-2 instruction sentence   -> prompts/items_{en,es}.json  ('instruction')",
     "  - the 36 item texts                -> prompts/items_{en,es}.json  ('items')",
@@ -14,10 +22,9 @@
     "The Spanish strings here were drafted by Claude Opus 5 and MUST be checked by",
     "the student against prompts/TRANSLATION_LOG.md before the runs."
   ],
-
   "en": {
     "persona_system": "You are a person from {country}.",
-    "no_persona_system": null,
+    "no_persona_system": "You are a person answering a survey.",
     "scale_header": "Use the following scale:",
     "format_instruction": "Answer every statement. Respond with ONLY a single JSON object mapping each statement number to an integer from 1 to 5, and no other text. Example format: {\"1\": 3, \"2\": 5, \"3\": 1, ...,  \"36\": 4}",
     "countries": {
@@ -28,10 +35,9 @@
       "Peru": "Peru"
     }
   },
-
   "es": {
-    "persona_system": "Eres una persona de {country}.",
-    "no_persona_system": null,
+    "persona_system": "Usted es una persona de {country}.",
+    "no_persona_system": "Usted es una persona que responde a una encuesta.",
     "scale_header": "Utilice la siguiente escala:",
     "format_instruction": "Responda a todas las afirmaciones. Responda ÚNICAMENTE con un solo objeto JSON que asocie el número de cada afirmación con un número entero del 1 al 5, sin ningún otro texto. Formato de ejemplo: {\"1\": 3, \"2\": 5, \"3\": 1, ...,  \"36\": 4}",
     "countries": {

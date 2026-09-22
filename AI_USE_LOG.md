@@ -15,3 +15,4 @@ the student's own.
 | 2026-09-22 | Claude Code (Claude Opus 5) | `prompts/templates.json` — non-official prompt strings (persona sentence, scale header, JSON-format instruction, Spanish country names). Wording is a design decision; drafted by the tool, to be confirmed/edited by the student. |
 | 2026-09-22 | Claude Code (Claude Opus 5) | `src/build_prompts.py` — assembles the 12 experimental cells from the official item text plus the templates, hashes each prompt for provenance. |
 | 2026-09-22 | Claude Code (Claude Opus 5) | Spanish drafts and literal back-translations in `prompts/TRANSLATION_LOG.md`. **Marked UNVERIFIED** — drafted and back-translated by the same tool, so not an independent check; student to verify against an independent engine before the runs. |
+| 2026-09-22 | Claude Code (Claude Opus 5) | `config.json` — run configuration (models, 50 samples/cell, temperature 0.8, retry budget). Values chosen by the student; file written by the tool. |

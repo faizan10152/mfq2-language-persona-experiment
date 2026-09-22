@@ -1,5 +1,5 @@
-### CELL es_Peru   prompt_sha256_12=bb6b1910a845
-### system: 'Eres una persona de Perú.'
+### CELL es_Peru   prompt_sha256_12=514465c5c7bf
+### system: 'Usted es una persona de Perú.'
 
 Para cada una de las afirmaciones a continuación, indique en qué medida cada afirmación lo describe a usted o sus opiniones.
 

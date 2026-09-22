@@ -2,7 +2,7 @@
   "en_none": {
     "language": "en",
     "persona": "none",
-    "prompt_sha256_12": "c545050ef697"
+    "prompt_sha256_12": "59557dee962e"
   },
   "en_Argentina": {
     "language": "en",
@@ -32,31 +32,31 @@
   "es_none": {
     "language": "es",
     "persona": "none",
-    "prompt_sha256_12": "aa3b2aaefaf2"
+    "prompt_sha256_12": "122f032d5b76"
   },
   "es_Argentina": {
     "language": "es",
     "persona": "Argentina",
-    "prompt_sha256_12": "f81810a8d704"
+    "prompt_sha256_12": "45e3257a890a"
   },
   "es_Chile": {
     "language": "es",
     "persona": "Chile",
-    "prompt_sha256_12": "bd4338fc5764"
+    "prompt_sha256_12": "e0ee05cba1cb"
   },
   "es_Colombia": {
     "language": "es",
     "persona": "Colombia",
-    "prompt_sha256_12": "34a1511579d7"
+    "prompt_sha256_12": "87fe1f776666"
   },
   "es_Mexico": {
     "language": "es",
     "persona": "Mexico",
-    "prompt_sha256_12": "5b2abd09bb56"
+    "prompt_sha256_12": "b60bfdc1f2f7"
   },
   "es_Peru": {
     "language": "es",
     "persona": "Peru",
-    "prompt_sha256_12": "bb6b1910a845"
+    "prompt_sha256_12": "514465c5c7bf"
   }
 }

@@ -1,0 +1,28 @@
+{
+  "_README": "Run configuration. Every value here must appear in the paper's Method section.",
+  "models": [
+    "qwen2.5:7b",
+    "llama3.1:8b",
+    "mistral:7b"
+  ],
+  "samples_per_cell": 50,
+  "sampling": {
+    "temperature": 0.8,
+    "_temperature_note": "Set explicitly, not inherited from Ollama's default, so the runs are reproducible from the paper alone. Decision taken 2026-09-22.",
+    "top_p": null,
+    "seed_per_sample": true
+  },
+  "max_parse_retries": 3,
+  "languages": [
+    "en",
+    "es"
+  ],
+  "personas": [
+    "none",
+    "Argentina",
+    "Chile",
+    "Colombia",
+    "Mexico",
+    "Peru"
+  ]
+}

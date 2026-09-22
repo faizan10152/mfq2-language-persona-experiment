@@ -1,5 +1,5 @@
-### CELL en_none   prompt_sha256_12=c545050ef697
-### system: None
+### CELL en_none   prompt_sha256_12=59557dee962e
+### system: 'You are a person answering a survey.'
 
 For each of the statements below, please indicate how well each statement describes you or your opinions.
 

@@ -1,5 +1,5 @@
-### CELL es_none   prompt_sha256_12=aa3b2aaefaf2
-### system: None
+### CELL es_none   prompt_sha256_12=122f032d5b76
+### system: 'Usted es una persona que responde a una encuesta.'
 
 Para cada una de las afirmaciones a continuación, indique en qué medida cada afirmación lo describe a usted o sus opiniones.
 
