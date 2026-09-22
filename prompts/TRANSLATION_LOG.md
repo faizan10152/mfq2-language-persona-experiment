@@ -61,10 +61,10 @@ survey." / "Usted es una persona que responde a una encuesta." — so the only t
 varying across persona conditions is the country cue itself, and any persona effect is
 attributable to the country rather than to the presence of a system message.
 
-## Not yet verified against Münker (2025)
+## Resolved: persona wording vs Münker (decided 2026-09-22)
 
-The English persona sentence "You are a person from {country}." is a plausible
-minimal persona cue, but it has **not** been checked against the wording Münker
-(2025) actually used. If comparability with Münker is a claim the paper wants to
-make, the student must read the exact prompt out of that paper (or its repository)
-and reconcile it here. Do not assert comparability until that is done.
+Münker (2025) describes his persona prompt but never prints it, and his code is only
+available on request. The English persona sentence `You are a person from {country}.`
+implements his description and is kept. Design-level comparability may be claimed;
+string-level replication may not. Full analysis, including a divergence in MFQ-2
+item 27, is in `prompts/MUNKER_COMPARABILITY.md`.
