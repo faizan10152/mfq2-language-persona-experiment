@@ -1,0 +1,62 @@
+{
+  "en_none": {
+    "language": "en",
+    "persona": "none",
+    "prompt_sha256_12": "c545050ef697"
+  },
+  "en_Argentina": {
+    "language": "en",
+    "persona": "Argentina",
+    "prompt_sha256_12": "eb8465207f2c"
+  },
+  "en_Chile": {
+    "language": "en",
+    "persona": "Chile",
+    "prompt_sha256_12": "614be6677ce0"
+  },
+  "en_Colombia": {
+    "language": "en",
+    "persona": "Colombia",
+    "prompt_sha256_12": "f46e5d5140ec"
+  },
+  "en_Mexico": {
+    "language": "en",
+    "persona": "Mexico",
+    "prompt_sha256_12": "38825c4643f8"
+  },
+  "en_Peru": {
+    "language": "en",
+    "persona": "Peru",
+    "prompt_sha256_12": "0a59ad615d14"
+  },
+  "es_none": {
+    "language": "es",
+    "persona": "none",
+    "prompt_sha256_12": "aa3b2aaefaf2"
+  },
+  "es_Argentina": {
+    "language": "es",
+    "persona": "Argentina",
+    "prompt_sha256_12": "f81810a8d704"
+  },
+  "es_Chile": {
+    "language": "es",
+    "persona": "Chile",
+    "prompt_sha256_12": "bd4338fc5764"
+  },
+  "es_Colombia": {
+    "language": "es",
+    "persona": "Colombia",
+    "prompt_sha256_12": "34a1511579d7"
+  },
+  "es_Mexico": {
+    "language": "es",
+    "persona": "Mexico",
+    "prompt_sha256_12": "5b2abd09bb56"
+  },
+  "es_Peru": {
+    "language": "es",
+    "persona": "Peru",
+    "prompt_sha256_12": "bb6b1910a845"
+  }
+}

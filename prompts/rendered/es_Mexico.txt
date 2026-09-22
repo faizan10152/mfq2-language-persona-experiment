@@ -1,0 +1,50 @@
+### CELL es_Mexico   prompt_sha256_12=5b2abd09bb56
+### system: 'Eres una persona de México.'
+
+Para cada una de las afirmaciones a continuación, indique en qué medida cada afirmación lo describe a usted o sus opiniones.
+
+Utilice la siguiente escala:
+1 = No me describe en absoluto
+2 = Me describe en cierta medida
+3 = Me describe moderadamente
+4 = Me describe bastante bien
+5 = Me describe extremadamente bien
+
+1. Preocuparse por las personas que han sufrido es una virtud importante.
+2. El mundo sería un lugar mejor si todos ganaran la misma cantidad de dinero.
+3. Creo que las personas que más trabajan deberían tener más dinero.
+4. Creo que se les debería enseñar a los niños a ser leales a sus países.
+5. Creo que es importante que las sociedades aprecien sus valores tradicionales.
+6. Creo que se debería tratar al cuerpo humano como a un templo que alberga algo sagrado en su interior.
+7. Creo que sentir compasión por aquellos que sufren es una de las virtudes más importantes.
+8. Nuestra sociedad tendría menos problemas si las personas tuvieran los mismos ingresos.
+9. Creo que a las personas se las debería premiar según su contribución.
+10. Me molesta cuando las personas no son leales a sus países.
+11. Creo que la mayoría de las tradiciones tienen una función valiosa para mantener el orden en una sociedad.
+12. Creo que la castidad es una virtud importante.
+13. A todos nos deberían importar las personas que sufren algún dolor emocional.
+14. Creo que a todos se les debería dar la misma cantidad de recursos en la vida.
+15. El esfuerzo que un trabajador pone en una tarea debería reflejarse en el tamaño del aumento que recibe.
+16. Todos deberían amar su propia comunidad.
+17. Creo que la obediencia hacia los padres es una virtud importante.
+18. Me molesta cuando las personas dicen groserías como si no pasara nada.
+19. Siento empatía hacia esas personas que han sufrido en la vida.
+20. Creo que sería ideal si todos en la sociedad se las arreglaran con casi la misma cantidad de dinero.
+21. Me siento feliz cuando a las personas se las reconoce por sus méritos.
+22. Todos deberían defender a su país, si se lo pidieran.
+23. Todos debemos aprender de las personas mayores.
+24. Si me entero de que un conocido tiene un fetiche sexual inusual pero inofensivo, me sentiría incómodo.
+25. Todos deberían intentar consolar a quienes están pasando por un momento difícil.
+26. Cuando las personas trabajan juntas para alcanzar una meta común, deberían compartir los logros por igual, incluso si algunos trabajaron más para lograrlos.
+27. En una sociedad justa, me gustaría que las personas que trabajan más que otras fueran más adineradas que otras.
+28. Todos deberían sentirse orgullosos cuando una persona de su comunidad gana una competencia internacional.
+29. Creo que uno de los valores más importantes que se les debe enseñar a los niños es tener respeto por la autoridad.
+30. Las personas deberían intentar usar medicamentos naturales en vez de los que hacen los humanos que son químicamente idénticos.
+31. Me duele cuando veo a alguien que ignora las necesidades de otro ser humano.
+32. Me enojo cuando algunas personas tienen más dinero que otras en mi país.
+33. Me siento bien cuando descubren y castigan a aquellos que engañan.
+34. Creo que la fortaleza de un equipo deportivo proviene de la lealtad mutua de sus miembros.
+35. Creo que contar con un líder sólido es bueno para la sociedad.
+36. Admiro a aquellas personas que resguardan su virginidad hasta el casamiento.
+
+Responda a todas las afirmaciones. Responda ÚNICAMENTE con un solo objeto JSON que asocie el número de cada afirmación con un número entero del 1 al 5, sin ningún otro texto. Formato de ejemplo: {"1": 3, "2": 5, "3": 1, ...,  "36": 4}

@@ -13,7 +13,7 @@ Atari et al. (2023).
 - [x] Human data verified and baselines computed (`src/load_human.py`)
 - [x] Item mapping resolved against the authors' own analysis code (`src/item_map.py`)
 - [x] EN/ES questionnaire text extracted (`src/parse_docx.py`)
-- [ ] Prompt templates
+- [x] Prompt templates (`prompts/templates.json`, `src/build_prompts.py`) — Spanish wording UNVERIFIED, see `prompts/TRANSLATION_LOG.md`
 - [ ] Model runs (`src/run_models.py`)
 - [ ] Analysis, tables, figures (`src/analyze.py`, `src/plots.py`)
 
@@ -27,7 +27,14 @@ python3 -m venv .venv
 ./.venv/bin/pip install pandas numpy scipy python-docx matplotlib requests
 ./.venv/bin/python src/parse_docx.py     # -> prompts/items_en.json, prompts/items_es.json
 ./.venv/bin/python src/load_human.py     # -> data/processed/*.csv, prints the verification report
+./.venv/bin/python src/build_prompts.py  # -> prompts/rendered/*.txt, prompts/prompt_index.json
 ```
+
+## Design
+
+12 cells = 2 prompt languages (English, Spanish) x 6 persona conditions
+(none + 5 countries), identical across models. Official MFQ-2 text is never
+paraphrased; all other prompt wording lives in `prompts/templates.json`.
 
 ## Data provenance
 
