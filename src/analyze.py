@@ -29,6 +29,9 @@ import json
 import sys
 from pathlib import Path
 
+from functools import lru_cache
+from itertools import permutations
+
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -83,6 +86,52 @@ def load_human() -> tuple[pd.DataFrame, pd.DataFrame, pd.Series]:
     return (h,
             h.groupby("country_label")[FOUNDATIONS].mean(),
             h.groupby("country_label")[FOUNDATIONS].std())
+
+
+# --------------------------------------------------------------------------- #
+# Statistics helpers
+# --------------------------------------------------------------------------- #
+
+@lru_cache(maxsize=None)
+def _spearman_null(n: int) -> np.ndarray:
+    """All attainable rho values for n untied observations (n! permutations)."""
+    base = list(range(n))
+    return np.array([stats.spearmanr(base, perm).statistic for perm in permutations(base)])
+
+
+def exact_spearman(x, y) -> tuple[float, float]:
+    """Spearman rho with an EXACT permutation p-value for small n.
+
+    scipy's asymptotic p-value is invalid at the sample sizes used here: with
+    n = 5 countries it reports p = 1.4e-24 for rho = 1.0, when the smallest
+    attainable two-tailed p is 1/60 = 0.0167 (there are only 5! = 120 orderings).
+    Reporting the asymptotic value would overstate the evidence by 22 orders of
+    magnitude. For n <= 8 we enumerate the null distribution exactly.
+
+    Assumes no ties (true of the human means; model means could in principle tie,
+    in which case the permutation null is approximate).
+    """
+    rho = float(stats.spearmanr(x, y).statistic)
+    n = len(x)
+    if n <= 8:
+        null = _spearman_null(n)
+        return rho, float(np.mean(np.abs(null) >= abs(rho) - 1e-9))
+    return rho, float(stats.spearmanr(x, y).pvalue)
+
+
+def holm(pvals: pd.Series) -> pd.Series:
+    """Holm-Bonferroni adjusted p-values (less conservative than Bonferroni,
+    still controls the family-wise error rate)."""
+    p = pvals.to_numpy(dtype=float)
+    order = np.argsort(p)
+    m = len(p)
+    adj = np.empty(m)
+    running = 0.0
+    for rank, idx in enumerate(order):
+        val = (m - rank) * p[idx]
+        running = max(running, val)
+        adj[idx] = min(running, 1.0)
+    return pd.Series(adj, index=pvals.index)
 
 
 # --------------------------------------------------------------------------- #
@@ -165,13 +214,17 @@ def rank_correlation(scores: pd.DataFrame, hmean: pd.DataFrame) -> pd.DataFrame:
     for (model, lang), g in scores[scores.persona != "none"].groupby(["model", "language"]):
         cm = g.groupby("persona")[FOUNDATIONS].mean().reindex(SPANISH_COUNTRIES)
         for f in FOUNDATIONS:
-            rho, p = stats.spearmanr(hmean.reindex(SPANISH_COUNTRIES)[f].values, cm[f].values)
+            rho, p = exact_spearman(hmean.reindex(SPANISH_COUNTRIES)[f].values, cm[f].values)
             sd = float(cm[f].std())
             rows.append({"model": model, "language": lang, "foundation": f,
                          "spearman_rho": float(rho), "p_value": float(p),
                          "model_spread_sd": sd,
                          "spread_warning": "rho on near-identical means" if sd < 0.05 else ""})
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+    # Family-wise correction across every rank-correlation test in the study.
+    df["p_holm"] = holm(df["p_value"])
+    df["significant_holm"] = df["p_holm"] < 0.05
+    return df
 
 
 def persona_anova(scores: pd.DataFrame, human: pd.DataFrame) -> pd.DataFrame:
@@ -202,7 +255,10 @@ def persona_anova(scores: pd.DataFrame, human: pd.DataFrame) -> pd.DataFrame:
                          "F": float(F), "p_value": float(p),
                          "eta2_model": eta2(F, len(groups), n),
                          "eta2_human": he, "p_human": hp})
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+    df["p_holm"] = holm(df["p_value"])
+    df["significant_holm"] = df["p_holm"] < 0.05
+    return df
 
 
 def sd_ratio(scores: pd.DataFrame, hsd: pd.DataFrame) -> pd.DataFrame:

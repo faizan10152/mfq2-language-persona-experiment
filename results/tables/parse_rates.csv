@@ -1,5 +1,16 @@
 model,language,persona,n,n_parsed,mean_retries,mean_seconds,parse_rate,pct_clean_json
-llama3.1:8b,en,none,40,40,0.0,9.840250000000001,1.0,1.0
+llama3.1:8b,en,Argentina,50,50,0.0,9.2424,1.0,1.0
+llama3.1:8b,en,Chile,50,50,0.0,9.3358,1.0,1.0
+llama3.1:8b,en,Colombia,50,50,0.0,9.1504,1.0,1.0
+llama3.1:8b,en,Mexico,50,50,0.0,9.4998,1.0,1.0
+llama3.1:8b,en,Peru,50,50,0.0,13.189200000000001,1.0,1.0
+llama3.1:8b,en,none,50,50,0.0,9.7842,1.0,1.0
+llama3.1:8b,es,Argentina,50,50,0.0,18.586,1.0,1.0
+llama3.1:8b,es,Chile,50,50,0.0,17.613599999999998,1.0,1.0
+llama3.1:8b,es,Colombia,50,50,0.0,17.5506,1.0,1.0
+llama3.1:8b,es,Mexico,50,50,0.0,16.996199999999998,1.0,1.0
+llama3.1:8b,es,Peru,50,50,0.0,18.5726,1.0,1.0
+llama3.1:8b,es,none,50,50,0.0,17.5582,1.0,1.0
 qwen2.5:7b,en,Argentina,50,50,0.0,9.2904,1.0,1.0
 qwen2.5:7b,en,Chile,50,50,0.0,9.245800000000001,1.0,1.0
 qwen2.5:7b,en,Colombia,50,50,0.0,9.4614,1.0,1.0
