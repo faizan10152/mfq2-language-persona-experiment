@@ -204,8 +204,11 @@ def run_cell_sample(model: str, lang: str, persona: str, sample_id: int,
             raw = resp.get("message", {}).get("content", "")
             err = None
             eval_count = resp.get("eval_count")
+            # Prompt token count: lets the paper state tokenizer cost in tokens
+            # rather than inferring it from wall-clock seconds.
+            prompt_eval_count = resp.get("prompt_eval_count")
         except Exception as exc:  # network / timeout / server error
-            raw, err, eval_count = "", f"{type(exc).__name__}: {exc}", None
+            raw, err, eval_count, prompt_eval_count = "", f"{type(exc).__name__}: {exc}", None, None
         elapsed = round(time.time() - t0, 2)
 
         obj, how = (None, "request_failed") if err else extract_json(raw)
@@ -218,6 +221,7 @@ def run_cell_sample(model: str, lang: str, persona: str, sample_id: int,
             "attempt": attempt, "seed": seed, "raw_text": raw,
             "extract_mode": how, "status": status,
             "request_error": err, "seconds": elapsed, "eval_count": eval_count,
+            "prompt_eval_count": prompt_eval_count,
         })
         if parsed is not None:
             break

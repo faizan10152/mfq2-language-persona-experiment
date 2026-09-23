@@ -1,6 +1,6 @@
 {
   "ollama_version": "0.30.6",
-  "started_utc": "2026-09-22T15:36:09.395343+00:00",
+  "started_utc": "2026-09-23T21:14:58.064616+00:00",
   "config": {
     "_README": "Run configuration. Every value here must appear in the paper's Method section.",
     "models": [
@@ -34,13 +34,13 @@
     ]
   },
   "models": {
-    "llama3.1:8b": {
-      "model": "llama3.1:8b",
-      "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "mistral:7b": {
+      "model": "mistral:7b",
+      "digest": "6577803aa9a036369e481d648a2baebb381ebc6e897f2bb9a766a2aa7bfbc1cf",
       "family": "llama",
-      "parameter_size": "8.0B",
+      "parameter_size": "7.2B",
       "quantization_level": "Q4_K_M",
-      "modelfile_parameters": "stop                           \"<|start_header_id|>\"\nstop                           \"<|end_header_id|>\"\nstop                           \"<|eot_id|>\""
+      "modelfile_parameters": "stop                           \"[INST]\"\nstop                           \"[/INST]\""
     }
   }
 }
