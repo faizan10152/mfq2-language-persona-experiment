@@ -112,6 +112,13 @@ def exact_spearman(x, y) -> tuple[float, float]:
     in which case the permutation null is approximate).
     """
     rho = float(stats.spearmanr(x, y).statistic)
+    # A degenerate cell -- every country mean identical, as in mistral:7b / en /
+    # Care where all 300 administrations scored exactly 5.0 -- has no defined
+    # ordering, so rho is NaN. It is NOT a test and must not enter the family:
+    # abs(NaN) comparisons silently evaluate False, which would otherwise yield
+    # p = 0.0 and report total collapse as the strongest correlation in the study.
+    if not np.isfinite(rho):
+        return float("nan"), float("nan")
     n = len(x)
     if n <= 8:
         null = _spearman_null(n)
@@ -123,13 +130,15 @@ def holm(pvals: pd.Series) -> pd.Series:
     """Holm-Bonferroni adjusted p-values (less conservative than Bonferroni,
     still controls the family-wise error rate)."""
     p = pvals.to_numpy(dtype=float)
-    order = np.argsort(p)
-    m = len(p)
-    adj = np.empty(m)
+    adj = np.full(len(p), np.nan)
+    valid = np.flatnonzero(np.isfinite(p))   # NaN entries are not tests
+    if valid.size == 0:
+        return pd.Series(adj, index=pvals.index)
+    order = valid[np.argsort(p[valid])]
+    m = valid.size
     running = 0.0
     for rank, idx in enumerate(order):
-        val = (m - rank) * p[idx]
-        running = max(running, val)
+        running = max(running, (m - rank) * p[idx])
         adj[idx] = min(running, 1.0)
     return pd.Series(adj, index=pvals.index)
 
@@ -223,7 +232,7 @@ def rank_correlation(scores: pd.DataFrame, hmean: pd.DataFrame) -> pd.DataFrame:
     df = pd.DataFrame(rows)
     # Family-wise correction across every rank-correlation test in the study.
     df["p_holm"] = holm(df["p_value"])
-    df["significant_holm"] = df["p_holm"] < 0.05
+    df["significant_holm"] = df["p_holm"].lt(0.05).fillna(False)
     return df
 
 
@@ -257,7 +266,7 @@ def persona_anova(scores: pd.DataFrame, human: pd.DataFrame) -> pd.DataFrame:
                          "eta2_human": he, "p_human": hp})
     df = pd.DataFrame(rows)
     df["p_holm"] = holm(df["p_value"])
-    df["significant_holm"] = df["p_holm"] < 0.05
+    df["significant_holm"] = df["p_holm"].lt(0.05).fillna(False)
     return df
 
 
