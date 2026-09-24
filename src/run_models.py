@@ -274,11 +274,20 @@ def main() -> int:
         return 1
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    # Merge into any existing metadata rather than overwriting: running one
+    # model at a time otherwise leaves only the last model's digest on disk,
+    # and the digests are what make the runs reproducible.
+    prior = {}
+    if META_PATH.exists():
+        try:
+            prior = json.loads(META_PATH.read_text()).get("models", {})
+        except json.JSONDecodeError:
+            prior = {}
     meta = {
         "ollama_version": ver,
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "config": cfg,
-        "models": {},
+        "models": dict(prior),
     }
     for m in models:
         try:
