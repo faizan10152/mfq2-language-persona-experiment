@@ -17,7 +17,7 @@ Atari et al. (2023).
 - [x] Runner written (`src/run_models.py`) — awaiting model pulls, then smoke test
 - [x] All three models: 1,800 administrations, 100% parsed
 - [x] Analysis (`src/analyze.py`) — 9 tidy tables
-- [ ] Figures (`src/plots.py`)
+- [x] Figures (`src/plots.py`) — 4 figures, PNG + PDF, captions in `results/figures/CAPTIONS.md`
 
 ## Reproduce
 
@@ -30,6 +30,9 @@ python3 -m venv .venv
 ./.venv/bin/python src/parse_docx.py     # -> prompts/items_en.json, prompts/items_es.json
 ./.venv/bin/python src/load_human.py     # -> data/processed/*.csv, prints the verification report
 ./.venv/bin/python src/build_prompts.py  # -> prompts/rendered/*.txt, prompts/prompt_index.json
+./.venv/bin/python src/run_models.py     # -> results/raw_jsonl/*.jsonl  (needs Ollama)
+./.venv/bin/python src/analyze.py        # -> results/tables/*.csv
+./.venv/bin/python src/plots.py          # -> results/figures/*.png, *.pdf
 ```
 
 ## Design
