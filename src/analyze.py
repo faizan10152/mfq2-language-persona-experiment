@@ -236,6 +236,92 @@ def rank_correlation(scores: pd.DataFrame, hmean: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def profile_test(scores: pd.DataFrame, hmean: pd.DataFrame,
+                 exclude: list[str] | None = None, n_perm: int = 20000,
+                 seed: int = 20260924) -> pd.DataFrame:
+    """Primary accuracy test: ONE test per model x language, not six.
+
+    Why this exists. A per-foundation Spearman rho over five countries has a hard
+    floor of p = 1/60 = 0.0167 (only 5! = 120 orderings exist, and a two-tailed
+    test counts the perfect and perfectly-reversed ones). Across 36 such tests,
+    family-wise correction pushes even a FLAWLESS match past 0.05 -- llama3.1:8b
+    reproduces the human Authority ordering exactly, rho = 1.00, and still cannot
+    be called significant. The test is structurally incapable, not the model.
+
+    Note this cannot be fixed by using item-level data (36 items x 5 countries =
+    180 points): those are still five countries measured 36 times, not 180
+    independent observations, and treating them as independent would manufacture
+    significance. The 1-in-60 floor applies to any test whose null is "the
+    country labels could have been shuffled".
+
+    What this does instead: the statistic is the MEAN rho across foundations, and
+    the null permutes the five country labels independently within each
+    foundation. The combined statistic therefore has a null with far more than
+    120 attainable values, so a genuine effect can reach significance, and only
+    one test per model x language needs correcting.
+
+    `exclude` drops degenerate foundations (e.g. Care, where mistral:7b answers
+    5.0 to every item and no ordering exists).
+    """
+    rng = np.random.default_rng(seed)
+    use = [f for f in FOUNDATIONS if f not in (exclude or [])]
+    rows = []
+    for (model, lang), g in scores[scores.persona != "none"].groupby(["model", "language"]):
+        cm = g.groupby("persona")[FOUNDATIONS].mean().reindex(SPANISH_COUNTRIES)
+        hm = hmean.reindex(SPANISH_COUNTRIES)
+        obs, kept = [], []
+        for f in use:
+            if cm[f].std() == 0:          # no ordering exists in this cell
+                continue
+            obs.append(stats.spearmanr(hm[f].values, cm[f].values).statistic)
+            kept.append(f)
+        if not obs:
+            continue
+        observed = float(np.mean(obs))
+        null = np.empty(n_perm)
+        mats = [(hm[f].values, cm[f].values) for f in kept]
+        for i in range(n_perm):
+            null[i] = np.mean([stats.spearmanr(h, rng.permutation(m)).statistic
+                               for h, m in mats])
+        p_two = float(np.mean(np.abs(null) >= abs(observed) - 1e-12))
+        rows.append({"model": model, "language": lang,
+                     "foundations_used": ",".join(kept), "k": len(kept),
+                     "mean_rho": observed, "p_perm": p_two,
+                     "null_mean": float(null.mean()), "null_sd": float(null.std()),
+                     "n_perm": n_perm})
+    df = pd.DataFrame(rows)
+    if len(df):
+        df["p_holm"] = holm(df["p_perm"])
+        df["significant_holm"] = df["p_holm"].lt(0.05).fillna(False)
+    return df
+
+
+def ceiling_report(scores: pd.DataFrame, hsd: pd.DataFrame) -> pd.DataFrame:
+    """Foundations where a model has collapsed to (near) a single answer.
+
+    Reported separately rather than carried through every metric as a flat line:
+    mistral:7b scores exactly 5.0 on Care in all 300 English administrations, so
+    its SD is 0, its between-country spread is 0, and rho is undefined. That is a
+    finding about variance collapse, not a data point about country accuracy.
+    """
+    rows = []
+    for (model, lang, f), sd in (
+            scores[scores.persona != "none"]
+            .melt(id_vars=["model", "language", "persona"], value_vars=FOUNDATIONS,
+                  var_name="foundation", value_name="score")
+            .groupby(["model", "language", "foundation"])["score"].std().items()):
+        cm = (scores[(scores.model == model) & (scores.language == lang) &
+                     (scores.persona != "none")].groupby("persona")[f].mean())
+        rows.append({"model": model, "language": lang, "foundation": f,
+                     "pooled_model_sd": float(sd),
+                     "between_country_spread": float(cm.std()),
+                     "mean_human_sd": float(hsd[f].mean()),
+                     "sd_ratio": float(sd / hsd[f].mean()),
+                     "degenerate": bool(cm.std() == 0),
+                     "near_ceiling": bool(sd / hsd[f].mean() < 0.15)})
+    return pd.DataFrame(rows).sort_values(["sd_ratio"])
+
+
 def persona_anova(scores: pd.DataFrame, human: pd.DataFrame) -> pd.DataFrame:
     """Metric 2c. One-way ANOVA of the persona (5 countries) on the model's
     scores, with eta-squared, alongside the same statistic for country in the
@@ -345,6 +431,9 @@ def main() -> int:
         "persona_anova.csv": persona_anova(scores, human),
         "sd_ratio.csv": sd_ratio(scores, hsd),
         "language_effect.csv": language_effect(scores, human),
+        "ceiling_report.csv": ceiling_report(scores, hsd),
+        "profile_test.csv": profile_test(scores, hmean, exclude=["Care"]),
+        "profile_test_with_care.csv": profile_test(scores, hmean),
     }
     for name, df in outputs.items():
         df.to_csv(TABLES / name, index=False)

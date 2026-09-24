@@ -1,0 +1,7 @@
+model,language,foundations_used,k,mean_rho,p_perm,null_mean,null_sd,n_perm,p_holm,significant_holm
+llama3.1:8b,en,"Equality,Proportionality,Loyalty,Authority,Purity",5,0.5799999999999998,0.0088,0.00017500000000000027,0.22523327768116325,20000,0.0352,True
+llama3.1:8b,es,"Equality,Proportionality,Loyalty,Authority,Purity",5,0.6,0.0064,0.0003639999999999997,0.2234448198191222,20000,0.032,True
+mistral:7b,en,"Equality,Proportionality,Loyalty,Authority,Purity",5,0.050259783520851545,0.8291,-0.002371838551353498,0.22347788054555642,20000,1.0,False
+mistral:7b,es,"Equality,Proportionality,Loyalty,Authority,Purity",5,0.6641565363336246,0.00185,0.0003886651950724277,0.224528869536171,20000,0.0111,True
+qwen2.5:7b,en,"Equality,Proportionality,Loyalty,Authority,Purity",5,0.039999999999999966,0.89715,0.0013170000000000005,0.22338327043670927,20000,1.0,False
+qwen2.5:7b,es,"Equality,Proportionality,Loyalty,Authority,Purity",5,0.15999999999999998,0.4886,-0.0002676747709331,0.2246111760300365,20000,1.0,False
