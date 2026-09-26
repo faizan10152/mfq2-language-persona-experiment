@@ -1,0 +1,161 @@
+% ------------------------------------------------
+% METHOD
+% ------------------------------------------------
+
+\section{Method}
+\label{sec:methodology}
+
+\subsection{Human reference data}
+\label{subsec:humandata}
+
+The human baseline is Study~2 of \textcite{atari2023weird}, a cross-cultural
+validation of the second Moral Foundations Questionnaire (MFQ-2) administered in
+19 countries, whose raw data and official questionnaire translations the authors
+make publicly available. From that sample we use the five countries whose
+dominant language is Spanish: Argentina, Chile, Colombia, Mexico and Peru
+($n = 1{,}026$). They were selected because they differ from one another
+culturally while sharing a language, which allows the prompt language and the
+country cue to be varied independently. The file as distributed already contains
+only respondents who passed all three attention checks, so applying that
+criterion removes nobody; all item responses are complete and lie on the intended
+1--5 scale.
+
+\subsection{Instrument and scoring}
+\label{subsec:instrument}
+
+The MFQ-2 consists of 36 items measuring six moral foundations with six items
+each: Care, Equality, Proportionality, Loyalty, Authority and Purity. Respondents
+rate how well each statement describes them from \emph{Does not describe me at
+all}~(1) to \emph{Describes me extremely well}~(5). A foundation score is the
+mean of its six items and so also lies between 1 and 5.
+
+The public data file contains 50 item columns rather than 36, because Study~2
+administered a larger pool from which \textcite{atari2023weird} discarded 14
+items for cross-loading. Matching the published items to columns by wording alone
+is not sufficient, since three Loyalty items were reworded between the pool and
+the final instrument. We therefore took the scoring key from the authors' own
+Study~2 analysis script; the resulting mapping is given in
+Appendix~\ref{app:mapping}.
+
+\subsection{Design}
+\label{subsec:design}
+
+The experiment crosses \textbf{prompt language} (English or Spanish) with
+\textbf{persona} (none, or one of the five countries), giving $2 \times 6 = 12$
+cells per model. Following \textcite{munker2025cultural}, each cell is
+administered 50 times independently, yielding 600 administrations per model and
+1{,}800 across the three models. One \textbf{administration} is one complete
+questionnaire delivered in a single model call: the model receives all 36 items
+and returns all 36 answers, so the six foundation scores of an administration
+come from one response. An administration is thus the synthetic counterpart of a
+single human respondent.
+
+\subsection{Prompts}
+\label{subsec:prompts}
+
+The instruction sentence, the 36 items and the five scale labels are taken
+verbatim from the official English and Spanish MFQ-2 translations distributed
+with \textcite{atari2023weird}, and were extracted programmatically from those
+files rather than retyped. Using the official Spanish translation rather than
+translating the items ourselves follows \textcite{aksoy2024whose} and ensures the
+two language conditions administer the same instrument.
+
+Each prompt has a system message and a user message. The system message carries
+the persona and names only the country, for example \emph{``You are a person from
+Mexico.''} In the no-persona baseline it is present but contentless and
+structurally parallel (\emph{``You are a person answering a survey.''}), so that
+what varies across persona conditions is the country cue rather than the presence
+of a system message. The user message contains the official instruction, the five
+labelled scale points, the 36 items in published order, and an instruction to
+answer with a single JSON object mapping each item number to an integer from 1 to
+5. Keeping the persona to a bare geographical cue follows
+\textcite{munker2025cultural}, who describe such a prompt but do not print its
+wording; we therefore implement the description and claim comparability of design
+rather than of wording. Spanish strings not taken from the official translation
+were back-translated with DeepL as an independent check and use the formal
+\emph{usted} throughout, matching the register of the official instrument
+(Appendix~\ref{app:translation}).
+
+\subsection{Models and generation settings}
+\label{subsec:models}
+
+We use the three open-weight model families examined by
+\textcite{munker2025cultural}, at the smaller size in each family, run locally
+through Ollama~0.30.6 (Table~\ref{tab:models}). Running local open-weight models
+keeps the families comparable with that study and fixes the system under test,
+since the weights are identified by a content digest and cannot change beneath
+the experiment as a hosted model can.
+
+\begin{table}[H]
+\centering
+\caption{Models under test. Digests identify the exact weights; all three are
+distributed by default at 4-bit quantisation.}
+\label{tab:models}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Model tag} & \textbf{Parameters} & \textbf{Quantisation} & \textbf{Digest (first 12)} \\
+\midrule
+\texttt{qwen2.5:7b}  & 7.6B & Q4\_K\_M & \texttt{845dbda0ea48} \\
+\texttt{llama3.1:8b} & 8.0B & Q4\_K\_M & \texttt{46e0c10c039e} \\
+\texttt{mistral:7b}  & 7.2B & Q4\_K\_M & \texttt{6577803aa9a0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Temperature was set explicitly to 0.8 rather than inherited from the runtime
+default, the context window to 4{,}096 tokens and the generation limit to 1{,}024
+tokens; \texttt{top\_p} was left unset. Each administration uses its own
+deterministic seed derived from the model, language, persona and sample index, so
+the full set of responses can be regenerated exactly.
+
+\subsection{Response validation}
+\label{subsec:validation}
+
+A response is valid only if it parses as a JSON object containing exactly the
+keys 1 to 36, each mapped to an integer between 1 and 5. Responses wrapped in
+code fences or preceded by prose are recovered before validation; truncated,
+incomplete or out-of-range responses are rejected and retried up to three times
+with a fresh seed. Every raw response is stored whether or not it parsed, so no
+response is discarded by a parsing decision. Parse and retry rates are treated as
+results rather than diagnostics and are reported in Section~\ref{sec:results}.
+
+\subsection{Metrics}
+\label{subsec:metrics}
+
+Let $m_c$ be a model's mean score on a given foundation under the persona for
+country $c$, and $h_c$ the corresponding human mean, over the five countries $C$.
+
+\textbf{Distance to humans} measures how far a model's answers sit from the
+people it stands in for:
+\begin{equation}
+D = \frac{1}{|C|}\sum_{c \in C} \left| m_c - h_c \right|.
+\end{equation}
+
+\textbf{Between-country differentiation} asks whether the persona separates the
+countries at all. We report the standard deviation of the five country means for
+model and humans alike, and the effect size of a one-way ANOVA of persona on the
+model's administrations, $\eta^2 = F(k-1)/\left(F(k-1)+(N-k)\right)$ with $k=5$.
+The human country effect is reported beside it, so the model's differentiation is
+judged against how much real respondents differ rather than against zero.
+
+\textbf{Ordering accuracy} asks whether that separation runs in the right
+direction, as Spearman's $\rho$ between the model's and the humans' ordering of
+the five countries. Five countries admit only $5!=120$ orderings, which bounds
+what a single foundation-level test can show (Section~\ref{sec:limitations}). We
+therefore treat per-foundation $\rho$ as a descriptive effect size and test
+ordering once per model and language using the mean $\rho$ across foundations,
+against a null formed by permuting country labels independently within each
+foundation (20{,}000 permutations).
+
+\textbf{Within-country flattening} is the ratio of the model's standard deviation
+across its 50 administrations for a country to the human within-country standard
+deviation; a ratio below 1 indicates less variation than among real respondents.
+
+\textbf{Language effect} compares, for the no-persona cells, each model's mean
+under the two prompt languages and its absolute distance to the pooled human mean,
+asking whether prompting in Spanish moves a model towards or away from
+Spanish-speaking respondents.
+
+Within each family of tests, $p$-values are adjusted using the Holm--Bonferroni
+procedure, and exact permutation $p$-values are used for Spearman's $\rho$, whose
+asymptotic approximation is not valid at $n=5$.
